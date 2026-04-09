@@ -1,30 +1,19 @@
-import { useEffect, useState } from 'react';
-import Card from './components/Card';
-import Header from './components/Header';
-import { starsLoader } from './data/loaders';
+import { Route, Routes } from 'react-router';
+import MainLayout from './layouts/MainLayout';
+import AlphaCentauri from './pages/AlphaCentauri';
+import Stars from './pages/Stars';
+import SingleStar from './pages/SingleStar';
 
 function App() {
-  const [stars, setStars] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await starsLoader();
-      console.log(data);
-      setStars(data);
-    };
-    fetchData();
-  }, []);
-
   return (
-    <div className="body">
-      <Header />
-      <div className="grid">
-        {stars?.map((s) => (
-          <Card star={s} />
-        ))}
-      </div>
-      <footer>&copy; footerbla</footer>
-    </div>
+    <Routes>
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<Stars />} />
+        <Route path="/alpha-centauri" element={<AlphaCentauri />} />
+        <Route path="/stars/:slug" element={<SingleStar />} />
+        <Route path="*" element={<h1>Not found...</h1>} />
+      </Route>
+    </Routes>
   );
 }
 
