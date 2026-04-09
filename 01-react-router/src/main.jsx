@@ -6,6 +6,8 @@ import './index.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    {/* BrowserRouter aktiviert Client-Side Routing für die gesamte App */}
+    {/* Für andere Router-Arten würden wir auch hier eine andere Komponente verwenden */}
     <BrowserRouter>
       <App />
     </BrowserRouter>

@@ -5,6 +5,7 @@ import Card from '../components/Card';
 import { useOutletContext } from 'react-router';
 
 export default function Stars() {
+  // Eine Seite kann entweder ihre eigenen Daten fetchen ---
   // const [stars, setStars] = useState(null);
 
   // useEffect(() => {
@@ -16,7 +17,7 @@ export default function Stars() {
   //   fetchData();
   // }, []);
   //
-
+  // oder useOutletContext holt sich Daten vom Parent-Layout (MainLayout) aus dem 'context'-Prop
   const stars = useOutletContext();
 
   return (

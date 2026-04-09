@@ -7,6 +7,7 @@ import { Outlet } from 'react-router';
 export default function MainLayout() {
   const [stars, setStars] = useState(null);
 
+  // Auf allen Seiten verfügbare Daten können wir auch hier 'global' fetchen
   useEffect(() => {
     const fetchData = async () => {
       const data = await starsLoader();
@@ -19,6 +20,8 @@ export default function MainLayout() {
   return (
     <div className="body">
       <Header />
+      {/* Outlet rendert die Child-Routes an dieser Stelle */}
+      {/* context prop übergibt Daten an alle Child-Components */}
       <Outlet context={stars} />
       <footer>&copy; footerbla</footer>
     </div>

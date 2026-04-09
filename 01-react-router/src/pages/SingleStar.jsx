@@ -4,7 +4,10 @@ import { starsLoader } from '../data/loaders';
 import { useOutletContext, useParams } from 'react-router';
 
 export default function SingleStar() {
+  // useParams extrahiert URL-Parameter (hier :slug aus /stars/:slug)
   const params = useParams();
+  // Seiten für eine dynamische Detail-Ansicht
+  // können entweder ihre Daten selbst fetchen...
   // const [stars, setStars] = useState(null);
 
   // useEffect(() => {
