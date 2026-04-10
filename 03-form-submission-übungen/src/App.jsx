@@ -6,11 +6,11 @@ const App = () => {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path='/' element={<Home />} />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/search' element={<Search />} />
-        <Route path='*' element={<NotFound />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/register" element={<Register />} />
+        {/* <Route path='/search' element={<Search />} />*/}
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
