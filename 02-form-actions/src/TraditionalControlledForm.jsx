@@ -1,36 +1,37 @@
+import { useState } from 'react';
 import { sleep, validate } from './utils/index.js';
-import { useActionState } from 'react';
-
-async function action(prevState, formData) {
-  const data = Object.fromEntries(formData);
-  const validationErrors = validate(data);
-  if (Object.keys(validationErrors).length !== 0) {
-    return {
-      input: data,
-      errors: validationErrors,
-    };
-  }
-  await sleep(1000); // simuliert fetch()
-
-  return {
-    success: true,
-  };
-}
 
 export default function App() {
-  const [state, formAction, isPending] = useActionState(action, {
-    input: {
-      name: '',
-      email: '',
-      message: '',
-    },
-    errors: {
-      name: '',
-      email: '',
-      message: '',
-    },
-    success: null,
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrors(null);
+
+    try {
+      const validationErrors = validate({ name, email, message });
+      if (Object.keys(validationErrors).length !== 0) {
+        setErrors(validationErrors);
+        return;
+      }
+      await sleep(1000);
+
+      setName('');
+      setEmail('');
+      setMessage('');
+      alert('Message sent successfully!');
+    } catch (err) {
+      setErrors({ general: err.message || 'Something went wrong.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-gray-900 p-8 font-sans">
@@ -38,7 +39,7 @@ export default function App() {
         <h2 className="text-center text-2xl font-bold text-gray-200">
           Contact Us
         </h2>
-        <form className="space-y-4" action={formAction}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label
               className="block text-sm font-medium text-gray-200"
@@ -51,10 +52,11 @@ export default function App() {
               id="name"
               className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
               placeholder="Leia Organa"
-              defaultValue={state?.input?.name}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
-            {state?.errors?.name && (
-              <p className="mt-1 text-sm text-red-600">{state.errors.name}</p>
+            {errors?.name && (
+              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
             )}
           </div>
           <div>
@@ -69,10 +71,11 @@ export default function App() {
               id="email"
               className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
               placeholder="leia@rebellion.org"
-              defaultValue={state?.input?.email}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            {state?.errors?.email && (
-              <p className="mt-1 text-sm text-red-600">{state.errors.email}</p>
+            {errors?.email && (
+              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
             )}
           </div>
           <div>
@@ -88,27 +91,26 @@ export default function App() {
               rows={4}
               className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
               placeholder="Tell us how we can help..."
-              defaultValue={state?.input?.message}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             />
-            {state?.errors?.message && (
-              <p className="mt-1 text-sm text-red-600">
-                {state.errors.message}
-              </p>
+            {errors?.message && (
+              <p className="mt-1 text-sm text-red-600">{errors.message}</p>
             )}
           </div>
 
-          {state?.success && (
-            <p className="text-sm text-green-500">Thanks for your Message!</p>
+          {errors?.general && (
+            <p className="text-sm text-red-500">{errors.general}</p>
           )}
 
           <button
             type="submit"
-            disabled={isPending}
+            disabled={isSubmitting}
             className={`w-full rounded bg-blue-600 py-2 text-white hover:bg-blue-700 ${
-              isPending ? 'cursor-not-allowed opacity-70' : ''
+              isSubmitting ? 'cursor-not-allowed opacity-70' : ''
             }`}
           >
-            {isPending ? 'Sending...' : 'Send Message'}
+            {isSubmitting ? 'Sending...' : 'Send Message'}
           </button>
         </form>
       </div>
