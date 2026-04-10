@@ -1,10 +1,23 @@
 import { sleep, validate } from './utils/index.js';
+// NEU: useActionState kommt aus React 19 — ersetzt hier useState + handleSubmit
 import { useActionState } from 'react';
 
+// ✦ NEU: Die Submit-Logik lebt jetzt *außerhalb* der Komponente, als eigenständige Funktion.
+// Vorher: handleSubmit war eine Funktion innerhalb von App(), hatte Zugriff auf State-Setter.
+// Jetzt: action bekommt alles was sie braucht als Parameter übergeben.
+//
+// Parameter:
+//   prevState  → der State-Wert vom letzten Aufruf
+//   formData   → ein FormData-Objekt, das der Browser automatisch aus der <form> baut
 async function action(prevState, formData) {
+  // Object.fromEntries() liest alle name/value-Paare aus dem Formular aus —
   const data = Object.fromEntries(formData);
+
   const validationErrors = validate(data);
   if (Object.keys(validationErrors).length !== 0) {
+    // Bei Fehlern: neuen State zurückgeben.
+    // React übergibt diesen Rückgabewert als nächstes 'state' an die Komponente.
+    // 'input' speichert die eingegebenen Werte, damit die Felder nicht geleert werden.
     return {
       input: data,
       errors: validationErrors,
@@ -12,13 +25,21 @@ async function action(prevState, formData) {
   }
   await sleep(1000); // simuliert fetch()
 
+  // Bei Erfolg: State signalisiert success.
+  // Wenn wir keinen input oder errors zurückgeben, bleiben diese Elemente leer
   return {
     success: true,
   };
 }
 
 export default function App() {
+  // ✦ NEU: useActionState ersetzt mehrere useState-Aufrufe auf einmal.
+  //   state     → das aktuelle Ergebnis der action-Funktion (oder der Initialwert)
+  //   formAction → wird direkt an action={} der <form> übergeben
+  //   isPending  → true solange die action noch läuft (ersetzt isSubmitting)
   const [state, formAction, isPending] = useActionState(action, {
+    // Initialwert — wird als 'state' verwendet bevor das Formular zum ersten Mal abgeschickt wird.
+    // 'input' speichert die letzten Eingaben (für den Fehlerfall, damit sie erhalten bleiben).
     input: {
       name: '',
       email: '',
@@ -38,6 +59,10 @@ export default function App() {
         <h2 className="text-center text-2xl font-bold text-gray-200">
           Contact Us
         </h2>
+
+        {/*
+          ✦ NEU: action={formAction} statt onSubmit={handleSubmit}
+        */}
         <form className="space-y-4" action={formAction}>
           <div>
             <label
@@ -46,6 +71,13 @@ export default function App() {
             >
               Name
             </label>
+            {/*
+              ✦ UNTERSCHIED: defaultValue statt value + onChange
+              - Vorher (kontrolliert): value={name} onChange={(e) => setName(e.target.value)}
+              - Jetzt (unkontrolliert): defaultValue={state?.input?.name}
+              Der Input verwaltet seinen Wert selbst — React liest ihn nur über FormData aus.
+              defaultValue setzt den Startwert (wichtig: zeigt die alten Eingaben bei Fehlern).
+            */}
             <input
               name="name"
               id="name"
@@ -53,6 +85,7 @@ export default function App() {
               placeholder="Leia Organa"
               defaultValue={state?.input?.name}
             />
+            {/* Fehlermeldung kommt jetzt aus state.errors statt aus einem eigenen errors-State */}
             {state?.errors?.name && (
               <p className="mt-1 text-sm text-red-600">{state.errors.name}</p>
             )}
@@ -97,10 +130,12 @@ export default function App() {
             )}
           </div>
 
+          {/* Beispiel für Erfolgsnachricht*/}
           {state?.success && (
             <p className="text-sm text-green-500">Thanks for your Message!</p>
           )}
 
+          {/* isPending kommt direkt aus useActionState — kein eigenes isSubmitting-State nötig */}
           <button
             type="submit"
             disabled={isPending}
