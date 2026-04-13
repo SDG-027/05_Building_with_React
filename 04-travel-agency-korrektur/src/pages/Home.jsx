@@ -1,7 +1,8 @@
+import { useOutletContext } from 'react-router';
 import { DestinationCard } from '../components';
 
 const Home = () => {
-  const destinations = undefined;
+  const destinations = useOutletContext();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -9,6 +10,8 @@ const Home = () => {
 
   return (
     <div className="space-y-16">
+      <title>Travel Agency</title>
+      <meta description="A cool travelling Page" />
       <section className="space-y-4 text-center">
         <h1 className="text-primary text-4xl font-bold">
           Find Your Next Student Adventure

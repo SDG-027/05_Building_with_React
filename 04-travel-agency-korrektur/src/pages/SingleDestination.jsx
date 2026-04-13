@@ -1,12 +1,16 @@
+import { useOutletContext, useParams } from 'react-router';
+
 const SingleDestination = () => {
-  const { slug } = { slug: 'berlin' };
-  const destinations = undefined;
+  // console.log(window.location);
+  const { slug } = useParams();
+  const destinations = useOutletContext();
 
   const destination = destinations?.find((d) => d.slug === slug);
 
   if (!destination) {
     return (
       <div className="py-20 text-center">
+        <title>Travel Agency</title>
         <h1 className="text-error text-3xl font-bold">Destination Not Found</h1>
         <p className="text-base-content mt-2">
           Sorry, we couldn't find the destination you're looking for.
@@ -16,6 +20,7 @@ const SingleDestination = () => {
   }
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4">
+      <title>Destinations | Travel Agency</title>
       <h1 className="text-primary text-center text-4xl font-bold">
         {destination.title}
       </h1>

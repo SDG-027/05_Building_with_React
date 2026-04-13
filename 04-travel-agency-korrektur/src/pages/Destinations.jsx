@@ -4,16 +4,26 @@ import { DestinationCard } from '../components';
 const Destinations = () => {
   const destinations = useOutletContext();
   return (
-    <div className='space-y-10 px-4 max-w-7xl mx-auto'>
-      <section className='text-center space-y-2'>
-        <h1 className='text-4xl font-bold text-primary'>Explore All Destinations</h1>
-        <p className='text-lg text-base-content'>
-          Discover exciting and affordable travel spots curated just for software engineering students.
+    <div className="mx-auto max-w-7xl space-y-10 px-4">
+      <title>Destinations | Travel Agency</title>
+      <section className="space-y-2 text-center">
+        <h1 className="text-primary text-4xl font-bold">
+          Explore All Destinations
+        </h1>
+        <p className="text-base-content text-lg">
+          Discover exciting and affordable travel spots curated just for
+          software engineering students.
         </p>
       </section>
-      <section className='grid sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+      <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {destinations.map(({ title, image, text, slug }) => (
-          <DestinationCard key={slug} title={title} image={image} text={text} slug={slug} />
+          <DestinationCard
+            key={slug}
+            title={title}
+            image={image}
+            text={text}
+            slug={slug}
+          />
         ))}
       </section>
     </div>
