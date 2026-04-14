@@ -1,27 +1,31 @@
 import { Outlet } from 'react-router';
 import { Footer, NavBar } from '../components';
-import { useEffect, useState } from 'react';
+import { Suspense } from 'react';
+import ThemeProvider from '../context/ThemeContext';
+import { useContext } from 'react';
+import { BookingContext } from '../context/BookingContext';
+
+const destinationsPromise = fetch('/travel.json').then((res) => res.json());
 
 export default function MainLayout() {
-  const [destinations, setDestinations] = useState(null);
-
-  useEffect(() => {
-    fetch('/travel.json')
-      .then((res) => res.json())
-      .then((data) => setDestinations(data));
-  }, []);
-
+  const { bookingState } = useContext(BookingContext);
   return (
-    <div className="flex min-h-screen flex-col">
-      <NavBar />
-      <main className="container mx-auto mb-auto px-4 py-8">
-        {destinations ? (
-          <Outlet context={destinations} />
-        ) : (
-          <span className="loading loading-dots loading-xl"></span>
-        )}
-      </main>
-      <Footer />
-    </div>
+    <ThemeProvider>
+      <div
+        className="flex min-h-screen flex-col"
+        data-theme={bookingState.premium ? 'cyberpunk' : 'halloween'}
+      >
+        <NavBar />
+        <main className="container mx-auto mb-auto px-4 py-8">
+          <Suspense
+            fallback={<span className="loading loading-dots loading-xl"></span>}
+          >
+            <Outlet context={destinationsPromise} />
+            {/* async Outlet*/}
+          </Suspense>
+        </main>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 }

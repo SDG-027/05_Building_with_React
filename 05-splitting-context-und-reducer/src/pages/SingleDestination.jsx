@@ -1,9 +1,11 @@
+import { use } from 'react';
 import { useOutletContext, useParams } from 'react-router';
 
 const SingleDestination = () => {
   // console.log(window.location);
   const { slug } = useParams();
-  const destinations = useOutletContext();
+  const destinationsPromise = useOutletContext();
+  const destinations = use(destinationsPromise);
 
   const destination = destinations?.find((d) => d.slug === slug);
 

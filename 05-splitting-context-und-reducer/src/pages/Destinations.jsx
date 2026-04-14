@@ -1,8 +1,10 @@
 import { useOutletContext } from 'react-router';
 import { DestinationCard } from '../components';
+import { use } from 'react';
 
 const Destinations = () => {
-  const destinations = useOutletContext();
+  const destinationsPromise = useOutletContext();
+  const destinations = use(destinationsPromise);
   return (
     <div className="mx-auto max-w-7xl space-y-10 px-4">
       <title>Destinations | Travel Agency</title>

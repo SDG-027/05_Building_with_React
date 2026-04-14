@@ -1,10 +1,13 @@
+import { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const navLinkClass = ({ isActive }) =>
   isActive ? `underline underline-offset-2` : ``;
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const { setTheme } = useContext(ThemeContext);
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -18,6 +21,16 @@ const NavBar = () => {
         <button className="text-2xl" onClick={() => navigate(1)}>
           &rarr;
         </button>
+        <select
+          defaultValue={'halloween'}
+          className="select"
+          onChange={(e) => setTheme(e.target.value)}
+        >
+          <option value="halloween">Halloween</option>
+          <option value="retro">Retro</option>
+          <option value="cyberpunk">Cyberpunk</option>
+          <option value="dim">Dim</option>
+        </select>
       </div>
       <nav className="flex-none">
         <ul className="menu menu-horizontal gap-2.5 px-1">

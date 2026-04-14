@@ -1,13 +1,14 @@
+import { lazy } from 'react';
+
 import { Routes, Route } from 'react-router';
 import MainLayout from './layouts/MainLayout';
-import {
-  About,
-  Contact,
-  Destinations,
-  Home,
-  NotFound,
-  SingleDestination,
-} from './pages';
+
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Destinations = lazy(() => import('./pages/Destinations'));
+const SingleDestination = lazy(() => import('./pages/SingleDestination'));
+const Contact = lazy(() => import('./pages/Contact'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
   return (

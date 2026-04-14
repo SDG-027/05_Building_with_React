@@ -1,8 +1,11 @@
 import { useOutletContext } from 'react-router';
 import { DestinationCard } from '../components';
+import { use } from 'react';
 
 const Home = () => {
-  const destinations = useOutletContext();
+  const destinationsPromise = useOutletContext();
+
+  const destinations = use(destinationsPromise);
 
   const handleSearch = (e) => {
     e.preventDefault();
