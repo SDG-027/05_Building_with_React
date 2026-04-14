@@ -7,6 +7,8 @@ const navLinkClass = ({ isActive }) =>
 
 const NavBar = () => {
   const navigate = useNavigate();
+
+  // Konsumiert ThemeContext - hat Zugriff auf den State-Setter
   const { setTheme } = useContext(ThemeContext);
 
   return (
