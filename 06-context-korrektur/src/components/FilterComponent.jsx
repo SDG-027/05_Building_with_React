@@ -1,7 +1,10 @@
-const FilterComponent = ({ setFilter }) => {
-  const setFilterInView = (filter) => {
-    setFilter(filter);
-  };
+import { useContext } from 'react';
+import { useTodos } from '../context/TodoContext';
+import { TodoReducerContext } from '../context/TodoReducerContext';
+
+const FilterComponent = () => {
+  // const { setFilterInView } = useTodos();
+  const { setFilterInView } = useContext(TodoReducerContext);
 
   return (
     <div className="mb-4 flex space-x-2">

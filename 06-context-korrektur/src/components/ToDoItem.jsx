@@ -1,12 +1,19 @@
-const ToDoItem = ({ todo, toggleTodo }) => {
+import { useContext } from 'react';
+import { TodoContext } from '../context/TodoContext';
+import { TodoReducerContext } from '../context/TodoReducerContext';
+
+const ToDoItem = ({ todo }) => {
+  // const { toggleTodo } = useContext(TodoContext);
+  const { toggleTodo } = useContext(TodoReducerContext);
+
   return (
-    <li className='flex items-center mb-2'>
+    <li className="mb-2 flex items-center">
       <label>
         <input
-          type='checkbox'
+          type="checkbox"
           checked={todo.completed}
           onChange={() => toggleTodo(todo.id)}
-          className='mr-2'
+          className="mr-2"
         />
         {todo.text}
       </label>
